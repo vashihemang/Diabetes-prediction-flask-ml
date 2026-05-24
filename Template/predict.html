@@ -1,0 +1,224 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<style>
+    /* 1. Global Layout & Backgrounds */
+    body { 
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+        background-color: #f4f4f9; 
+        margin: 40px;
+    }
+    
+    .container { 
+        max-width: 600px; 
+        margin: auto; 
+        background-color: #ffffff; 
+        padding: 30px 40px; 
+        border-radius: 12px; 
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); 
+    }
+
+    h2 { 
+        color: #2c3e50; 
+        text-align: center; 
+        margin-bottom: 25px;
+    }
+
+    /* 2. Form & Input Styles */
+    .form-group { 
+        margin-bottom: 20px; 
+    }
+    
+    .form-group label { 
+        display: block;
+        margin-bottom: 6px;
+        color: #34495e; 
+        font-weight: 500;
+    }
+    
+    .form-group input, 
+    .form-group select { 
+        width: 100%;
+        padding: 12px;
+        box-sizing: border-box;
+        border: 1px solid #ced4da; 
+        border-radius: 6px;
+        font-size: 15px;
+        color: #2c3e50; 
+        transition: 0.3s ease;
+    }
+
+    .form-group input:focus, 
+    .form-group select:focus { 
+        border-color: #3498db; 
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2); 
+    }
+
+    /* 3. Button Styles (Red Theme) */
+    button {
+        padding: 12px 25px;
+        width: 100%;
+        background-color: #e74c3c; 
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-top: 10px;
+    }
+    
+    button:hover { 
+        background-color: #c0392b; 
+    }
+
+    /* 4. Spinner & Loading Animation */
+    .loading { 
+        display: none; /* Hidden by default */
+        text-align: center; 
+        margin-top: 25px; 
+    }
+
+    .spinner { 
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3; 
+        border-top: 4px solid #3498db; 
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .loading-text { 
+        color: #3498db; 
+        font-weight: bold;
+        margin-top: 12px;
+    }
+
+    /* 5. Results Status Box */
+    .result-box { 
+        margin-top: 25px;
+        padding: 15px 20px;
+        background-color: #e8f6f3; 
+        border-left: 5px solid #1abc9c; 
+        border-radius: 6px;
+        text-align: center;
+    }
+    
+    .result-box h3 { 
+        color: #16a085; 
+        margin: 8px 0;
+    }
+    
+    .empty-state { 
+        text-align: center;
+        color: #95a5a6; 
+        margin-top: 25px;
+        font-style: italic;
+    }
+</style>
+
+<div class="container">
+    <h2>Diabetes Prediction</h2>
+
+    <form id="predictForm" action="/Prediction" method="POST">
+        <div class="form-group">
+            <label>Gender:</label>
+            <select name="gender" required>
+                <option value="">--Select--</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Age:</label>
+            <input type="number" name="Age" required>
+        </div>
+
+        <div class="form-group">
+            <label>Hypertension (0 or 1):</label>
+            <input type="number" name="Hypertension" min="0" max="1" required>
+        </div>
+
+        <div class="form-group">
+            <label>Heart Disease (0 or 1):</label>
+            <input type="number" name="Heart_disease" min="0" max="1" required>
+        </div>
+
+        <div class="form-group">
+            <label>Smoking History:</label>
+            <select name="Smoking_history" required>
+                <option value="">--Select--</option>
+                <option value="never">Never</option>
+                <option value="No Info">No Info</option>
+                <option value="current">Current</option>
+                <option value="former">Former</option>
+                <option value="ever">Ever</option>
+                <option value="not current">Not Current</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>BMI:</label>
+            <input type="number" step="0.01" name="Bmi" required>
+        </div>
+
+        <div class="form-group">
+            <label>HbA1c level:</label>
+            <input type="number" step="0.01" name="HbA1c_level" required>
+        </div>
+
+        <div class="form-group">
+            <label>Blood glucose level:</label>
+            <input type="number" name="Blood_glucose_level" required>
+        </div>
+
+        <div style="text-align: center;">
+            <button type="submit" id="submitBtn">Predict</button>
+        </div>
+    </form>
+
+    <div id="loadingUI" class="loading">
+        <div class="spinner"></div>
+        <div class="loading-text">Analyzing patient data...</div>
+    </div>
+
+    <div id="resultSection">
+        {% if result %}
+            <div class="result-box">
+                <h3>Prediction: {{ result }}</h3>
+                <h3>Probability: {{ prob|round(2) }}</h3>
+            </div>
+        {% else %}
+            <p class="empty-state">Prediction will appear here after submitting the form.</p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+    // Intercept the form submission to show the loading spinner
+    document.getElementById('predictForm').addEventListener('submit', function() {
+        // Hide the submit button to prevent duplicate clicks
+        document.getElementById('submitBtn').style.display = 'none';
+        
+        // Hide the previous results or empty text
+        const resultSection = document.getElementById('resultSection');
+        if (resultSection) {
+            resultSection.style.display = 'none';
+        }
+        
+        // Show the loading spinner using the specific class you provided
+        document.getElementById('loadingUI').style.display = 'block';
+    });
+</script>
+
+{% endblock %}
