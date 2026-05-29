@@ -38,38 +38,39 @@ if __name__=="__main__":
 
 
 
+# deploy with Streamlit :-
 
 
  
-# import numpy as np
+import numpy as np
 
 
-# import streamlit as st 
+import streamlit as st 
 
-# st.title("Diabetes Prediction")
-# gender = st.selectbox("Gender :",["Male", "Female"])
-# Age=st.number_input("Age :",min_value=0,max_value=100,step=1)
-# Hypertension=st.number_input("Hypertension :",min_value=0,step=1)
-# Heart_disease=st.number_input("Heart_disease :",min_value=0,step=1)
-# Smoking_history=st.selectbox("Smoking_history :", ['never', 'No Info', 'current', 'former', 'ever', 'not current'])
-# Bmi=st.number_input("Bmi :",min_value=0)
-# HbA1c_level=st.number_input('HbA1c_level:',min_value=0)
-# Blood_glucose_level=st.number_input('Blood_glucose_level :',min_value=0)
-
-
-# gender_encoder = encode["gender"].transform([gender])[0]
-# Smoking_history_encoder = encode["smoking_history"].transform([Smoking_history])[0]
+st.title("Diabetes Prediction")
+gender = st.selectbox("Gender :",["Male", "Female"])
+Age=st.number_input("Age :",min_value=0,max_value=100,step=1)
+Hypertension=st.number_input("Hypertension :",min_value=0,step=1)
+Heart_disease=st.number_input("Heart_disease :",min_value=0,step=1)
+Smoking_history=st.selectbox("Smoking_history :", ['never', 'No Info', 'current', 'former', 'ever', 'not current'])
+Bmi=st.number_input("Bmi :",min_value=0)
+HbA1c_level=st.number_input('HbA1c_level:',min_value=0)
+Blood_glucose_level=st.number_input('Blood_glucose_level :',min_value=0)
 
 
-# input_data = np.array([[gender_encoder,Age,Hypertension,Heart_disease,Smoking_history_encoder,Bmi,HbA1c_level,Blood_glucose_level]])
+gender_encoder = encode["gender"].transform([gender])[0]
+Smoking_history_encoder = encode["smoking_history"].transform([Smoking_history])[0]
 
 
-# if st.button("predict"):
-#     prediction = model.predict(input_data)
-#     if prediction[0] == 1:
-#         st.error("Patient is likely to have Diabetes")
-#         prob = model.predict_proba(input_data)[0][1]
-#         st.write(f"Diabetes Probability: {prob:.2%}")
+input_data = np.array([[gender_encoder,Age,Hypertension,Heart_disease,Smoking_history_encoder,Bmi,HbA1c_level,Blood_glucose_level]])
+
+
+if st.button("predict"):
+    prediction = model.predict(input_data)
+    if prediction[0] == 1:
+        st.error("Patient is likely to have Diabetes")
+        prob = model.predict_proba(input_data)[0][1]
+        st.write(f"Diabetes Probability: {prob:.2%}")
       
-#     else:
-#         st.success("Patient is NOT likely to have Diabetes")    
+    else:
+        st.success("Patient is NOT likely to have Diabetes")    
