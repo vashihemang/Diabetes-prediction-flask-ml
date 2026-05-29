@@ -38,6 +38,7 @@ The application is simple, lightweight, and suitable for beginners learning:
 
 ## 📂 Project Structure
 
+```bash
 Diabetes-prediction-flask-ml/
 │
 ├── static/
@@ -53,6 +54,7 @@ Diabetes-prediction-flask-ml/
 ├── requirements.txt
 ├── diabetes.csv
 └── README.md
+```
 
 ## 📊 Dataset
 
