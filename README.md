@@ -2,6 +2,21 @@
 
 A Machine Learning web application built with Flask that predicts whether a person is diabetic based on medical input parameters.
 
+## 📊 Dataset
+
+Datasetlink :- https://www.kaggle.com/datasets/iammustafatz/diabetes-prediction-dataset?utm_source=chatgpt.com
+
+The project uses the PIMA Indians Diabetes Dataset containing medical predictor variables such as:
+
+  * Pregnancies
+  * Glucose Level
+  * Blood Pressure
+  * Skin Thickness
+  * Insulin
+  * BMI
+  * Diabetes Pedigree Function
+  * Age
+
 ## 🚀 Project Overview
 
 This project uses a trained Machine Learning model integrated with a Flask web application to predict diabetes risk. Users can enter health-related details through a web interface, and the model returns a prediction result instantly.
@@ -13,7 +28,6 @@ The application is simple, lightweight, and suitable for beginners learning:
   * Model serialization with Pickle
   * End-to-end ML projects
 
-## 📸 Application Preview
 
 <img width="2814" height="1536" alt="diabetes" src="https://github.com/user-attachments/assets/32d67cca-1db4-491d-9a45-ea2c659bad36" />
 
@@ -56,20 +70,6 @@ Diabetes-prediction-flask-ml/
 └── README.md
 ```
 
-## 📊 Dataset
-
-The project uses the PIMA Indians Diabetes Dataset containing medical predictor variables such as:
-
-  * Pregnancies
-  * Glucose Level
-  * Blood Pressure
-  * Skin Thickness
-  * Insulin
-  * BMI
-  * Diabetes Pedigree Function
-  * Age
-
-  * 
 ## ⚙️ Installation
 
 ### 1. Clone the Repository
